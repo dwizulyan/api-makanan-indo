@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Makanan {
+  id        Int     @id @default(autoincrement())
+  nama      String?
+  deskripsi String?
+  resep     Resep?
+  asal      Daerah  @relation(fields: [daerahId], references: [id])
+  daerahId  Int
+}
+
+model Resep {
+  id        Int      @id @default(autoincrement())
+  menu      Makanan  @relation(fields: [makananId], references: [id])
+  makananId Int      @unique
+  bahan     String[]
+}
+
+model Daerah {
+  id      Int       @id @default(autoincrement())
+  nama    String?
+  makanan Makanan[]
+}
