@@ -1,0 +1,5 @@
+
+POST http://localhost:3000/api/create
+
+###
+GET http://localhost:3000/api/get-daerah

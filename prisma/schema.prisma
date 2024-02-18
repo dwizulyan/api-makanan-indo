@@ -24,6 +24,7 @@ model Resep {
   menu      Makanan  @relation(fields: [makananId], references: [id])
   makananId Int      @unique
   bahan     String[]
+  bumbu     String[]
 }
 
 model Daerah {
