@@ -1,17 +1,21 @@
 import sayHello from "./sayHello";
-import createDaerah from "./createDaerah";
-import getDaerah from "./getDaerah";
-import createMakanan from "./createMakanan";
-import createResep from "./createResep";
-import getMakanan from "./getMakanan";
-import getResep from "./getResep";
+
+import getDaerah from "./get/getDaerah";
+import getMakanan from "./get/getMakanan";
+import getResep from "./get/getResep";
+
+import createResep from "./create/createResep";
+import createMakanan from "./create/createMakanan";
+import createDaerah from "./create/createDaerah";
 
 export {
-  getMakanan,
-  createResep,
   sayHello,
-  createDaerah,
+  // Get controller
+  getMakanan,
   getResep,
   getDaerah,
+  // POST controller
+  createResep,
+  createDaerah,
   createMakanan,
 };
