@@ -37,7 +37,22 @@ class DbService {
      */
     async createMakanan(data: MakananDTO): Promise<Makanan | Prisma.PrismaClientKnownRequestError> {
         try {
-            const createMakanan: Makanan = await this.prisma.makanan.create({
+            const createMakanan = await this.prisma.makanan.create({
+                data: data
+            })
+            return createMakanan;
+        } catch (err) {
+            return err as Prisma.PrismaClientKnownRequestError
+        }
+    }
+    /**
+     * Create new makanan record but in batch
+     * 
+     * @param data - datas to be inserted into database
+     */
+    async createManyMakanan(data: MakananDTO[]): Promise<Prisma.BatchPayload | Prisma.PrismaClientKnownRequestError> {
+        try {
+            const createMakanan = await this.prisma.makanan.createMany({
                 data: data
             })
             return createMakanan;

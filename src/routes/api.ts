@@ -29,8 +29,18 @@ api.get("/", async (c: Context) => {
 })
 
 api.post("/", validateMakanan, async (c: Context) => {
-    const data = await c.req.json() as MakananDTO
+    const data = await c.req.json()
     try {
+        if (data.length > 0) {
+            const createMakanan = await db.createManyMakanan(data)
+            return c.json({
+                success: true,
+                message: "Successfully create new batch record",
+                data: createMakanan,
+            })
+
+
+        }
         const createMakanan = await db.createMakanan(data)
         return c.json({
             success: true,

@@ -9,7 +9,9 @@ const makananSchema = z.object({
     caraMembuat: z.array(z.string())
 })
 
-const validateMakanan = zValidator("json", makananSchema, (result, c: Context) => {
+const final = makananSchema.or(z.array(makananSchema))
+
+const validateMakanan = zValidator("json", final, (result, c: Context) => {
     if (!result.success) {
         if (result.error instanceof ZodError)
             return c.json({
