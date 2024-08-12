@@ -1,17 +1,35 @@
 import { Hono, Context } from "hono";
 import DbService from "../services/dbService";
 import { Prisma } from "@prisma/client";
+import { validateMakanan } from "../middleware/makanan";
+import { MakananDTO } from "../types";
 
 const api = new Hono();
 const db = new DbService();
 
-api.post("/", async (c: Context) => {
-    const data = {
-        name: "Ayam Geprek",
-        asal: "Jogjakarta",
-        bahan: ["Unknown"],
-        caraMembuat: ["Unknown"]
+api.get("/", async (c: Context) => {
+    const where = c.req.query()
+    try {
+        const getMakanan = await db.getMakanan(where)
+        return c.json({
+            success: true,
+            message: `Found records`,
+            searchParam: where,
+            data: getMakanan
+        })
+
+    } catch (err) {
+        if (err instanceof Prisma.PrismaClientKnownRequestError)
+            return c.json({
+                success: true,
+                message: err.toString(),
+                data: {}
+            })
     }
+})
+
+api.post("/", validateMakanan, async (c: Context) => {
+    const data = await c.req.json() as MakananDTO
     try {
         const createMakanan = await db.createMakanan(data)
         return c.json({
@@ -25,7 +43,27 @@ api.post("/", async (c: Context) => {
             return c.json({
                 success: false,
                 message: err.toString(),
-            })
+            }, 400)
+    }
+})
+
+api.delete("/", async (c: Context) => {
+    const { id } = c.req.query()
+    try {
+        const deleteMakanan = await db.deleteMakanan({ id: Number(id) })
+        return c.json({
+            success: true,
+            message: `Success delete : ${deleteMakanan.name}`,
+            data: {}
+        })
+    }
+    catch (err) {
+        if (err instanceof Prisma.PrismaClientKnownRequestError)
+            return c.json({
+                success: false,
+                message: err.toString(),
+                data: {}
+            }, 400)
     }
 })
 
